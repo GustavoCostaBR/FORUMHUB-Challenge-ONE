@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class User implements UserDetails {
         this.userName = userName;
         this.password = password;
         this.enabled = true;
+        this.topics = new ArrayList<>();
     }
 
     @Override
@@ -80,4 +82,7 @@ public class User implements UserDetails {
 //        TODO: To evaluate how this methods work and if it is necessary to implement it;
         //        return UserDetails.super.isEnabled();
     }
+
+    @OneToMany(mappedBy = "author")
+    private List<Topic> topics;
 }
