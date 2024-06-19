@@ -40,8 +40,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(new JWTTokenData(JWTToken));
     }
 
-    @PostMapping
-    @RequestMapping("/register")
+    @PostMapping("/register")
     public ResponseEntity createUser(@RequestBody @Valid UserDTO data) {
         System.out.println("Creating user");
         userService.createUser(data);
