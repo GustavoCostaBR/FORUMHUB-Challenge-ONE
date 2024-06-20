@@ -85,4 +85,7 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "author")
     private List<Topic> topics;
+
+    @OneToMany(mappedBy = "author")
+    private List<Answer> answers;
 }

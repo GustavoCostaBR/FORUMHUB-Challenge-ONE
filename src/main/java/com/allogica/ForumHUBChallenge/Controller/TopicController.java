@@ -1,8 +1,7 @@
 package com.allogica.ForumHUBChallenge.Controller;
 
-import com.allogica.ForumHUBChallenge.Model.Entities.DTOs.DetailedTopicDTO;
-import com.allogica.ForumHUBChallenge.Model.Entities.DTOs.ResumedTopicDTO;
-import com.allogica.ForumHUBChallenge.Model.Entities.DTOs.TopicDTO;
+import com.allogica.ForumHUBChallenge.Model.Entities.Answer;
+import com.allogica.ForumHUBChallenge.Model.Entities.DTOs.*;
 import com.allogica.ForumHUBChallenge.Model.Entities.Topic;
 import com.allogica.ForumHUBChallenge.Model.Entities.User;
 import com.allogica.ForumHUBChallenge.Model.Services.Security.TokenService;
@@ -52,5 +51,19 @@ public class TopicController {
     @GetMapping
     public ResponseEntity<ResumedTopicDTO[]> getTopics() {
         return ResponseEntity.ok(topicService.getTopics());
+    }
+
+    @PostMapping("/{id}/answer/create")
+    public ResponseEntity<ResponseAnswerDTO> createAnswer(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long id, @RequestBody @Valid CreateAnswerDTO createAnswerDTO) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        String userName = tokenService.getUsernameFromToken(token);
+        User user = (User) userService.loadUserByUsername(userName);
+
+        Answer answer = topicService.addAnswer(id, createAnswerDTO, user);
+        ResponseAnswerDTO responseAnswerDTO = ResponseAnswerDTO.fromAnswer(answer);
+
+        return ResponseEntity.ok(responseAnswerDTO);
     }
 }

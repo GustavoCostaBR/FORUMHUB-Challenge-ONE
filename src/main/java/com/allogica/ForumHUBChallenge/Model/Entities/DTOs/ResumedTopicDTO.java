@@ -18,7 +18,7 @@ public record ResumedTopicDTO(
                 topic.getId(),
                 topic.getTitle(),
                 topic.getStatus().toString(),
-                topic.getCreationDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                topic.getCreationDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
         );
 
     }

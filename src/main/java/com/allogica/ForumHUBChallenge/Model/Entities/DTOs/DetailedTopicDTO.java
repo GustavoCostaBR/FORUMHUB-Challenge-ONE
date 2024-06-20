@@ -12,7 +12,7 @@ public record DetailedTopicDTO(
         @JsonProperty("author") String author,
         String status,
         @JsonProperty("created_at") String createdAt,
-        AnswerDTO[] answers
+        ResponseAnswerDTO[] answers
 
 ) {
     public static DetailedTopicDTO fromTopic(Topic topic){
@@ -22,8 +22,8 @@ public record DetailedTopicDTO(
                 topic.getMessage(),
                 topic.getAuthor().getUsername(),
                 topic.getStatus().toString(),
-                topic.getCreationDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                topic.getAnswers().stream().map(AnswerDTO::fromAnswer).toArray(AnswerDTO[]::new)
+                topic.getCreationDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                topic.getAnswers().stream().map(ResponseAnswerDTO::fromAnswer).toArray(ResponseAnswerDTO[]::new)
         );
 
     }

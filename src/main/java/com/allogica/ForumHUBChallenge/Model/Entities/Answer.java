@@ -1,14 +1,17 @@
 package com.allogica.ForumHUBChallenge.Model.Entities;
 
+import com.allogica.ForumHUBChallenge.Model.Entities.DTOs.CreateAnswerDTO;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @EqualsAndHashCode(of = "id")
 public class Answer {
@@ -19,6 +22,8 @@ public class Answer {
 
     private String message;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User author;
 
     private LocalDateTime creationDate;
@@ -29,6 +34,13 @@ public class Answer {
 
     public Answer(String message, User author, Topic topic) {
         this.message = message;
+        this.author = author;
+        this.topic = topic;
+        this.creationDate = LocalDateTime.now();
+    }
+
+    public Answer(CreateAnswerDTO createAnswerDTO, Topic topic, User author) {
+        this.message = createAnswerDTO.message();
         this.author = author;
         this.topic = topic;
         this.creationDate = LocalDateTime.now();

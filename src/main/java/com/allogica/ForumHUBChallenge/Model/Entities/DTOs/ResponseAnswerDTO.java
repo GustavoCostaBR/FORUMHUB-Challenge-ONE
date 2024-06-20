@@ -7,27 +7,24 @@ import jakarta.validation.constraints.Pattern;
 
 import java.time.format.DateTimeFormatter;
 
-public record AnswerDTO(
+public record ResponseAnswerDTO(
         @NotNull
         Long id,
         @NotBlank
         String message,
         @NotBlank
         String authorName,
-
-        @NotBlank(message = "The creation date is required.")
-        @Pattern(regexp = "^\\d{2}/\\d{2}/\\d{4}$",message = "The creation date must be in the format dd/MM/yyyy.")
         String creationDate,
         @NotNull
         Long topicId
 ) {
 
-    public static AnswerDTO fromAnswer(Answer answer) {
-        return new AnswerDTO(
+    public static ResponseAnswerDTO fromAnswer(Answer answer) {
+        return new ResponseAnswerDTO(
                 answer.getId(),
                 answer.getMessage(),
                 answer.getAuthor().getUsername(),
-                answer.getCreationDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                answer.getCreationDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
                 answer.getTopic().getId()
         );
     }

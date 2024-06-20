@@ -1,5 +1,6 @@
 package com.allogica.ForumHUBChallenge.Model.Entities;
 
+import com.allogica.ForumHUBChallenge.Model.Entities.DTOs.CreateAnswerDTO;
 import com.allogica.ForumHUBChallenge.Model.Entities.Enums.TopicStatus;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -44,5 +45,14 @@ public class Topic {
 
     @OneToMany(mappedBy = "topic")
     private List<Answer> answers;
+
+    public Topic addAnswer(Answer answer) {
+        answers.add(answer);
+        return this;
+    }
+
+    public Answer getLastAnswer() {
+        return answers.get(answers.size() - 1);
+    }
 
 }
