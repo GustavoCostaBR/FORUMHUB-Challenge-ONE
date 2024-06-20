@@ -4,6 +4,7 @@ import com.allogica.ForumHUBChallenge.Model.Entities.Enums.TopicStatus;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @EqualsAndHashCode(of = "id")
 public class Topic {
