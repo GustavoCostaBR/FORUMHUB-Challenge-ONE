@@ -28,6 +28,8 @@ public class Topic {
 
     private LocalDateTime creationDate;
 
+    private boolean enabled;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User author;
@@ -39,6 +41,7 @@ public class Topic {
         this.creationDate = LocalDateTime.now();
         this.status = TopicStatus.NOT_ANSWERED;
         this.answers = new ArrayList<>();
+        this.enabled = true;
     }
 
     private TopicStatus status;

@@ -20,12 +20,17 @@ public record ResponseAnswerDTO(
 ) {
 
     public static ResponseAnswerDTO fromAnswer(Answer answer) {
-        return new ResponseAnswerDTO(
-                answer.getId(),
-                answer.getMessage(),
-                answer.getAuthor().getUsername(),
-                answer.getCreationDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                answer.getTopic().getId()
-        );
+        if (answer.isEnabled()){
+            return new ResponseAnswerDTO(
+                    answer.getId(),
+                    answer.getMessage(),
+                    answer.getAuthor().getUsername(),
+                    answer.getCreationDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                    answer.getTopic().getId()
+            );
+        }
+        else {
+            return null;
+        }
     }
 }

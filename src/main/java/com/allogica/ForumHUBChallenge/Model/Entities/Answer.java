@@ -32,18 +32,14 @@ public class Answer {
     @JoinColumn(name = "topic_id")
     private Topic topic;
 
-    public Answer(String message, User author, Topic topic) {
-        this.message = message;
-        this.author = author;
-        this.topic = topic;
-        this.creationDate = LocalDateTime.now();
-    }
+    private boolean enabled;
 
     public Answer(CreateAnswerDTO createAnswerDTO, Topic topic, User author) {
         this.message = createAnswerDTO.message();
         this.author = author;
         this.topic = topic;
         this.creationDate = LocalDateTime.now();
+        this.enabled = true;
     }
 
 

@@ -4,6 +4,7 @@ import com.allogica.ForumHUBChallenge.Model.Entities.Topic;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public record DetailedTopicDTO(
         Long id,
@@ -23,7 +24,7 @@ public record DetailedTopicDTO(
                 topic.getAuthor().getUsername(),
                 topic.getStatus().toString(),
                 topic.getCreationDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                topic.getAnswers().stream().map(ResponseAnswerDTO::fromAnswer).toArray(ResponseAnswerDTO[]::new)
+                topic.getAnswers().stream().map(ResponseAnswerDTO::fromAnswer).filter(Objects::nonNull).toArray(ResponseAnswerDTO[]::new)
         );
 
     }

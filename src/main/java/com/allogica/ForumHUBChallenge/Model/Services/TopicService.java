@@ -1,8 +1,8 @@
 package com.allogica.ForumHUBChallenge.Model.Services;
 
+import com.allogica.ForumHUBChallenge.Model.CustomExceptions.ValidationException;
 import com.allogica.ForumHUBChallenge.Model.Entities.Answer;
 import com.allogica.ForumHUBChallenge.Model.Entities.DTOs.CreateAnswerDTO;
-import com.allogica.ForumHUBChallenge.Model.Entities.DTOs.ResponseAnswerDTO;
 import com.allogica.ForumHUBChallenge.Model.Entities.DTOs.ResumedTopicDTO;
 import com.allogica.ForumHUBChallenge.Model.Entities.DTOs.TopicDTO;
 import com.allogica.ForumHUBChallenge.Model.Entities.Enums.TopicStatus;
@@ -31,11 +31,37 @@ public class TopicService {
     }
 
     public Topic getTopic(Long id) {
-        return topicRepository.findById(id).orElseThrow();
+        Topic topic = topicRepository.findByIdAndEnabledTrue(id).orElseThrow();
+
+        return topicRepository.findByIdAndEnabledTrue(id).orElseThrow();
     }
 
     public ResumedTopicDTO[] getTopics() {
-        return topicRepository.findAll().stream().map(ResumedTopicDTO::fromTopic).toArray(ResumedTopicDTO[]::new);
+        return topicRepository.findAllByEnabledTrue().stream().map(ResumedTopicDTO::fromTopic).toArray(ResumedTopicDTO[]::new);
+    }
+
+    @Transactional
+    public Topic updateTopic(Long id, TopicDTO topicDTO, User user) {
+        Topic topic = getTopic(id);
+        if (topic.getAuthor().equals(user)) {
+            topic.setTitle(topicDTO.title());
+            topic.setMessage(topicDTO.description());
+            return topic;
+        }
+        else {
+            throw new ValidationException("User is not the author of the topic");
+        }
+    }
+
+    @Transactional
+    public void deleteTopic (Long id, User user) {
+        Topic topic = getTopic(id);
+        if (topic.getAuthor().equals(user)) {
+            topic.setEnabled(false);
+        }
+        else {
+            throw new ValidationException("User is not the author of the topic");
+        }
     }
 
     @Transactional
@@ -48,5 +74,17 @@ public class TopicService {
             topic.setStatus(TopicStatus.UNDER_DISCUSSION);
         }
         return topic.getLastAnswer();
+    }
+
+    @Transactional
+    public void deleteAnswer(Long id, Long answerId, User user) {
+        Topic topic = getTopic(id);
+        Answer answer = answerRepository.findByIdAndEnabledTrue(answerId).orElseThrow();
+        if (answer.getAuthor().equals(user)) {
+            answer.setEnabled(false);
+        }
+        else {
+            throw new ValidationException("User is not the author of the answer");
+        }
     }
 }
