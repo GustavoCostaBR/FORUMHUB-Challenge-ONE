@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum TopicStatus {
 
     NOT_ANSWERED("Not answered"),
-    UNDER_DISCUSSION("Unde discussion"),
+    UNDER_DISCUSSION("Under discussion"),
     FINISHED("Finished");
 
     private final String description;

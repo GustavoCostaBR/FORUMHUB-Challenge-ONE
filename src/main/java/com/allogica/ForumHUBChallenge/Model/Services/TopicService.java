@@ -14,6 +14,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 public class TopicService {
 
@@ -43,6 +45,9 @@ public class TopicService {
     @Transactional
     public Topic updateTopic(Long id, TopicDTO topicDTO, User user) {
         Topic topic = getTopic(id);
+        if (topic.getStatus().equals(TopicStatus.FINISHED)) {
+            throw new ValidationException("Topic is already finished");
+        }
         if (topic.getAuthor().equals(user)) {
             topic.setTitle(topicDTO.title());
             topic.setMessage(topicDTO.description());
@@ -67,6 +72,9 @@ public class TopicService {
     @Transactional
     public Answer addAnswer(Long id, CreateAnswerDTO createAnswerDTO, User author) {
         Topic topic = getTopic(id);
+        if (topic.getStatus().equals(TopicStatus.FINISHED)) {
+            throw new ValidationException("Topic is already finished");
+        }
         Answer answer = new Answer(createAnswerDTO, topic, author);
         answerRepository.save(answer);
         topic = topic.addAnswer(answer);
@@ -81,10 +89,48 @@ public class TopicService {
         Topic topic = getTopic(id);
         Answer answer = answerRepository.findByIdAndEnabledTrue(answerId).orElseThrow();
         if (answer.getAuthor().equals(user)) {
+            if (answer.getTopic().getStatus().equals(TopicStatus.FINISHED)) {
+                throw new ValidationException("Topic is already finished");
+            }
             answer.setEnabled(false);
         }
         else {
             throw new ValidationException("User is not the author of the answer");
+        }
+    }
+
+    @Transactional
+    public Answer updateAnswer(Long id, Long answerId, CreateAnswerDTO createAnswerDTO, User user) {
+        Answer answer = answerRepository.findByIdAndEnabledTrue(answerId).orElseThrow();
+        if (answer.getAuthor().equals(user)) {
+            if (Objects.equals(answer.getTopic().getId(), id)) {
+                if (answer.getTopic().getStatus().equals(TopicStatus.FINISHED)) {
+                    throw new ValidationException("Topic is already finished");
+                }
+                answer.setMessage(createAnswerDTO.message());
+                return answer;
+            }
+            else {
+                throw new ValidationException("Answer does not belong to the topic");
+            }
+        }
+        else {
+            throw new ValidationException("User is not the author of the answer");
+        }
+    }
+
+    @Transactional
+    public Topic finishTopic(Long id, User user) {
+        Topic topic = getTopic(id);
+        if (topic.getAuthor().equals(user)) {
+            if (topic.getStatus() == TopicStatus.FINISHED) {
+                throw new ValidationException("Topic is already finished");
+            }
+            topic.setStatus(TopicStatus.FINISHED);
+            return topic;
+        }
+        else {
+            throw new ValidationException("User is not the author of the topic");
         }
     }
 }

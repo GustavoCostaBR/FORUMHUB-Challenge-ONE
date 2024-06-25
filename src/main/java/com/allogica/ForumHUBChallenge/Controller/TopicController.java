@@ -101,4 +101,30 @@ public class TopicController {
         topicService.deleteAnswer(id, answerId, user);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/{id}/answer/{answerId}")
+    public ResponseEntity<ResponseAnswerDTO> updateAnswer(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long id, @PathVariable Long answerId, @RequestBody @Valid CreateAnswerDTO createAnswerDTO) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        String userName = tokenService.getUsernameFromToken(token);
+        User user = (User) userService.loadUserByUsername(userName);
+
+        Answer answer = topicService.updateAnswer(id, answerId, createAnswerDTO, user);
+        ResponseAnswerDTO responseAnswerDTO = ResponseAnswerDTO.fromAnswer(answer);
+
+        return ResponseEntity.ok(responseAnswerDTO);
+    }
+
+    @PutMapping("/{id}/finished")
+    public ResponseEntity<DetailedTopicDTO> finishTopic(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long id) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        String userName = tokenService.getUsernameFromToken(token);
+        User user = (User) userService.loadUserByUsername(userName);
+
+        Topic topic = topicService.finishTopic(id, user);
+        return ResponseEntity.ok(DetailedTopicDTO.fromTopic(topic));
+    }
 }
