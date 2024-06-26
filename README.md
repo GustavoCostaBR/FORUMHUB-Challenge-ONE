@@ -33,8 +33,11 @@ A database em questão deve estar rodando com o nome indicado na variável de am
 java -Dspring.profiles.active=prod -DDATASOURCE_URL=jdbc:mysql://localhost/FORUMHUB -jar caminho_do_jar.jar
 ```
 Pode ainda adicionar as seguintes variáveis de ambiente:
+
 mysqlUSER: adicionando o comando -DmysqlUSER=usuario (escolhendo um valor que faça sentido para a database configurada no computador);
+
 mysqlPASSWORD: adicionando o comando -DmysqlPASSWORD=senha (escolhendo um valor que faça sentido para a database configurada no computador);
+
 JWT_SECRET: adicionando o comando -JWT_SECRET=segredo (escolhendo um valor que faça sentido para a aplicação);
 
 Há também a possibilidade de rodar o projeto com o GraalVM para criar uma imagem nativa, mas isso requer certo conhecimento fora do escopo deste Readme.
@@ -100,7 +103,9 @@ java -Dspring.profiles.active=prod -DDATASOURCE_URL=jdbc:mysql://localhost/FORUM
 
 You can also add the following environment variables:
 mysqlUSER: adding the command -DmysqlUSER=user (choosing a value that makes sense for the database configured on the computer);
+
 mysqlPASSWORD: adding the command -DmysqlPASSWORD=password (choosing a value that makes sense for the database configured on the computer);
+
 JWT_SECRET: adding the command -JWT_SECRET=secret (choosing a value that makes sense for the application);
 
 There is also the possibility of running the project with GraalVM to create a native image, but this requires some knowledge outside the scope of this Readme.
